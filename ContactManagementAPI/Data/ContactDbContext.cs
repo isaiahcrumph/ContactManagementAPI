@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ContactManagementAPI.Models;
 using System.Collections.Generic;
 
 namespace ContactManagementAPI.Data

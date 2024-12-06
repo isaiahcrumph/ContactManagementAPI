@@ -1,23 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ContactManagementAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using ContactManagementAPI.Services;
+using ContactManagementAPI.Models;
+
 namespace ContactManagementAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ContactsController : ControllerBase
     {
-        private readonly ContactDbContext _context;
-        public ContactsController(ContactDbContext context)
+        private readonly IContactService _contactService;
+        public ContactsController(IContactService contactService)
         {
-            _context = context;
+            _contactService = contactService;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contact>>> GetContacts()
         {
             try
             {
-                var contacts = await _context.Contacts.ToListAsync();
+                var contacts = await _contactService.GetAllContacts();
                 return Ok(contacts);
             }
             catch (Exception)
@@ -30,7 +33,7 @@ namespace ContactManagementAPI.Controllers
         {
             try
             {
-                var contact = await _context.Contacts.FindAsync(id);
+                var contact = await _contactService.GetContact(id);
                 if (contact == null)
                 {
                     return NotFound($"Contact with ID {id} not found");
@@ -51,9 +54,8 @@ namespace ContactManagementAPI.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                _context.Contacts.Add(contact);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetContact), new { id = contact.Id }, contact);
+                var createdContact = await _contactService.CreateContact(contact);
+                return CreatedAtAction(nameof(GetContact), new { id = createdContact.Id }, createdContact);
             }
             catch (Exception)
             {
@@ -71,47 +73,36 @@ namespace ContactManagementAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _context.Entry(contact).State = EntityState.Modified;
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ContactExists(id))
+                if (!_contactService.ContactExists(id))
                 {
                     return NotFound($"Contact with ID {id} not found");
                 }
-                throw;
+                await _contactService.UpdateContact(contact);
+                return NoContent();
             }
             catch (Exception)
             {
                 return StatusCode(500, $"Internal server error occurred while updating contact {id}");
             }
-            return NoContent();
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContact(int id)
         {
             try
             {
-                var contact = await _context.Contacts.FindAsync(id);
-                if (contact == null)
+                if (!_contactService.ContactExists(id))
                 {
                     return NotFound($"Contact with ID {id} not found");
                 }
-                _context.Contacts.Remove(contact);
-                await _context.SaveChangesAsync();
+                await _contactService.DeleteContact(id);
                 return NoContent();
             }
             catch (Exception)
             {
                 return StatusCode(500, $"Internal server error occurred while deleting contact {id}");
             }
-        }
-        private bool ContactExists(int id)
-        {
-            return _context.Contacts.Any(e => e.Id == id);
         }
     }
 }

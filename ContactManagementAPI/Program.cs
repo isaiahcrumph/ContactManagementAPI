@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ContactManagementAPI.Data;
 using Microsoft.OpenApi.Models;
+using ContactManagementAPI.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,12 +17,12 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Contact Management API",
         Version = "v1",
-        Description = "An API to manage contact information",
+        Description = "An API for managing contact information with full CRUD operations",
     });
 }); builder.Services.AddDbContext<ContactDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+builder.Services.AddScoped<IContactService, ContactService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
