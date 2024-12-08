@@ -6,7 +6,7 @@ using ContactManagementAPI.Models;
 
 namespace ContactManagementAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/contacts")]
     [ApiController]
     public class ContactsController : ControllerBase
     {

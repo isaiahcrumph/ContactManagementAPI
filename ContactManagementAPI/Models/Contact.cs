@@ -9,9 +9,19 @@ namespace ContactManagementAPI.Models
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Name must be between 2 and 100 characters")]
         public string Name { get; set; }
 
+/*        [Required(ErrorMessage = "Email is required")]
+        [RegularExpression(ErrorMessage = "Must input email address")]*/
+        //find the regular expresion for writing an email adress adn paste
+        ///make sure the email format is valid
+        ///
+
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid email address")]
+        [EmailAddress]
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+    ErrorMessage = "Invalid email format")]
+
         public string Email { get; set; }
+
 
         [Required(ErrorMessage = "Phone number is required")]
         [Phone(ErrorMessage = "Invalid phone number")]
