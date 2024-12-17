@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
+#nullable disable
+
 namespace ContactManagementAPI.Models
 {
     public class Contact
@@ -7,38 +10,46 @@ namespace ContactManagementAPI.Models
 
         [Required(ErrorMessage = "Name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Name must be between 2 and 100 characters")]
+        [SwaggerSchema(Description = "Full name of contact")]
+
         public string Name { get; set; }
 
-/*        [Required(ErrorMessage = "Email is required")]
-        [RegularExpression(ErrorMessage = "Must input email address")]*/
-        //find the regular expresion for writing an email adress adn paste
-        ///make sure the email format is valid
-        ///
-
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress]
+        [StringLength(100, ErrorMessage = "Email cannot be longer than 100 characters")]
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-    ErrorMessage = "Invalid email format")]
-
+            ErrorMessage = "Please enter a valid email address")]
+        [SwaggerSchema(Description = "Email address")]
         public string Email { get; set; }
 
-
         [Required(ErrorMessage = "Phone number is required")]
-        [Phone(ErrorMessage = "Invalid phone number")]
-        [RegularExpression(@"^\d{3}-\d{4}$|^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Phone number must be in format: 555-1234 or 555-123-1234")]
+        [RegularExpression(@"^\d{3}-\d{3}-\d{4}$",
+            ErrorMessage = "Phone number must be in format: 555-123-4567")]
+        [SwaggerSchema(Description = "Phone number in format: 555-123-4567")]
+
         public string PhoneNumber { get; set; }
 
-        [StringLength(200, ErrorMessage = "Address cannot exceed 200 characters")]
+        [Required(ErrorMessage = "Address is required")]
+        [StringLength(200, MinimumLength = 5, ErrorMessage = "Address must be between 5 and 200 characters")]
+        [SwaggerSchema(Description = "Street address")]
+
         public string Address { get; set; }
 
-        [StringLength(50, ErrorMessage = "City cannot exceed 50 characters")]
+        [Required(ErrorMessage = "City is required")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "City must be between 2 and 50 characters")]
+        [SwaggerSchema(Description = "City name")]
+
         public string City { get; set; }
 
-        [StringLength(2, MinimumLength = 2, ErrorMessage = "State must be 2 characters")]
-        [RegularExpression(@"^[A-Z]{2}$", ErrorMessage = "State must be 2 uppercase letters")]
+        [Required(ErrorMessage = "State is required")]
+        [RegularExpression(@"^[A-Z]{2}$", ErrorMessage = "State must be 2 uppercase letters (e.g., WA)")]
+        [SwaggerSchema(Description = "Two-letter state code")]
+
         public string State { get; set; }
 
-        [RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "ZipCode must be 5 digits or 5+4 digits")]
+        [Required(ErrorMessage = "ZIP Code is required")]
+        [RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "ZIP Code must be 5 digits or 5+4 digits format")]
+        [SwaggerSchema(Description = "ZIP Code in 5-digit or ZIP+4 format")]
+
         public string ZipCode { get; set; }
     }
 }

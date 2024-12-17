@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ContactManagementAPI.Data;
-using Microsoft.EntityFrameworkCore;
 using ContactManagementAPI.Services;
 using ContactManagementAPI.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ContactManagementAPI.Controllers
 {
@@ -15,7 +14,10 @@ namespace ContactManagementAPI.Controllers
         {
             _contactService = contactService;
         }
+
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Contact>>> GetContacts()
         {
             try
@@ -28,7 +30,11 @@ namespace ContactManagementAPI.Controllers
                 return StatusCode(500, "Internal server error occurred while retrieving contacts");
             }
         }
+
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Contact>> GetContact(int id)
         {
             try
@@ -45,7 +51,11 @@ namespace ContactManagementAPI.Controllers
                 return StatusCode(500, $"Internal server error occurred while retrieving contact {id}");
             }
         }
+
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Contact>> PostContact(Contact contact)
         {
             try
@@ -62,7 +72,12 @@ namespace ContactManagementAPI.Controllers
                 return StatusCode(500, "Internal server error occurred while creating the contact");
             }
         }
+
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PutContact(int id, Contact contact)
         {
             if (id != contact.Id)
@@ -87,7 +102,11 @@ namespace ContactManagementAPI.Controllers
                 return StatusCode(500, $"Internal server error occurred while updating contact {id}");
             }
         }
+
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteContact(int id)
         {
             try
