@@ -10,5 +10,6 @@ namespace ContactManagementAPI.Services
         Task UpdateContact(Contact contact);
         Task DeleteContact(int id);
         bool ContactExists(int id);
+        Task<IEnumerable<Contact>> GetFilteredContacts(string? name = null, string? city = null, string? state = null, string? sortBy = null, string? order = null);
     }
 }

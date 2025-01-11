@@ -18,11 +18,16 @@ namespace ContactManagementAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<Contact>>> GetContacts()
+        public async Task<ActionResult<IEnumerable<Contact>>> GetContacts(
+            [FromQuery] string? name = null,
+            [FromQuery] string? city = null,
+            [FromQuery] string? state = null,
+            [FromQuery] string? sortBy = null,
+            [FromQuery] string? order = null)
         {
             try
             {
-                var contacts = await _contactService.GetAllContacts();
+                var contacts = await _contactService.GetFilteredContacts(name, city, state, sortBy, order);
                 return Ok(contacts);
             }
             catch (Exception)
@@ -30,7 +35,6 @@ namespace ContactManagementAPI.Controllers
                 return StatusCode(500, "Internal server error occurred while retrieving contacts");
             }
         }
-
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
