@@ -19,9 +19,10 @@ namespace ContactManagementAPI.Services
             return await _context.Contacts.ToListAsync();
         }
 
-        public async Task<Contact?> GetContact(int id)
+        public async Task<Contact> GetContact(int id)
         {
-            return await _context.Contacts.FindAsync(id);
+            var contact = await _context.Contacts.FindAsync(id);
+            return contact == null ? throw new KeyNotFoundException("Contact not found") : contact;
         }
 
         public async Task<Contact> CreateContact(Contact contact)
