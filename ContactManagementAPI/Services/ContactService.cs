@@ -1,5 +1,6 @@
 ﻿using ContactManagementAPI.Data;
 using ContactManagementAPI.Models;
+using ContactManagementAPI.Models.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContactManagementAPI.Services
@@ -75,8 +76,79 @@ public async Task<IEnumerable<Contact>> GetFilteredContacts(
         };
     }
 
+
+    
     return await query.ToListAsync();
 }
+
+        public async Task<PagedResult<Contact>> GetFilteredContactsPaged(
+    string? name = null,
+    string? city = null,
+    string? state = null,
+    string? sortBy = null,
+    string? order = null,
+    int pageNumber = 1,
+    int pageSize = 10)
+        {
+            // Start with queryable
+            var query = _context.Contacts.AsQueryable();
+
+            // Apply filters
+            if (!string.IsNullOrEmpty(name))
+                query = query.Where(c => c.Name.Contains(name));
+            if (!string.IsNullOrEmpty(city))
+                query = query.Where(c => c.City.Contains(city));
+            if (!string.IsNullOrEmpty(state))
+                query = query.Where(c => c.State == state);
+
+            // Apply sorting
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                query = sortBy.ToLower() switch
+                {
+                    "name" => order?.ToLower() == "desc" ? query.OrderByDescending(c => c.Name) : query.OrderBy(c => c.Name),
+                    "city" => order?.ToLower() == "desc" ? query.OrderByDescending(c => c.City) : query.OrderBy(c => c.City),
+                    "state" => order?.ToLower() == "desc" ? query.OrderByDescending(c => c.State) : query.OrderBy(c => c.State),
+                    _ => query.OrderBy(c => c.Id)
+                };
+            }
+
+            // Get total count before paging
+            var totalCount = await query.CountAsync();
+
+            // Apply paging
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<Contact>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+                Data = items
+            };
+        }
+
+        public async Task UpdateContactPartial(int id, Dictionary<string, object> patchValues)
+        {
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact == null)
+                throw new KeyNotFoundException("Contact not found");
+
+            foreach (var field in patchValues)
+            {
+                var property = typeof(Contact).GetProperty(field.Key);
+                if (property != null)
+                {
+                    property.SetValue(contact, Convert.ChangeType(field.Value, property.PropertyType));
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
 
         public bool ContactExists(int id)
         {

@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using ContactManagementAPI.Services;
 using ContactManagementAPI.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,10 @@ builder.Services.AddSwaggerGen(c =>
     });
     c.EnableAnnotations();  
     c.ExampleFilters();
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    //c.IncludeXmlComments(xmlPath);
 });
 
 // SQL Server configuration

@@ -2,6 +2,7 @@
 using ContactManagementAPI.Services;
 using ContactManagementAPI.Models;
 using Microsoft.AspNetCore.Http;
+using ContactManagementAPI.Models.Pagination;
 
 namespace ContactManagementAPI.Controllers
 {
@@ -59,6 +60,41 @@ namespace ContactManagementAPI.Controllers
             catch (Exception)
             {
                 return StatusCode(500, $"Internal server error occurred while retrieving contact {id}");
+            }
+        }
+
+       // /// <summary>
+       // /// Gets a paged list of contacts with optional filtering and sorting
+       // /// </summary>
+       // /// <param name="name">Filter by contact name</param>
+       // /// <param name="city">Filter by city</param>
+       // /// <param name="state">Filter by state (2 letter code)</param>
+       // /// <param name="sortBy">Sort by field (name, city, state)</param>
+       // /// <param name="order">Sort order (asc or desc)</param>
+       // /// <param name="pageNumber">Page number (starts from 1)</param>
+       // /// <param name="pageSize">Number of items per page</param>
+
+        [HttpGet("paged")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<PagedResult<Contact>>> GetContactsPaged(
+    [FromQuery] string? name = null,
+    [FromQuery] string? city = null,
+    [FromQuery] string? state = null,
+    [FromQuery] string? sortBy = null,
+    [FromQuery] string? order = null,
+    [FromQuery] int pageNumber = 1,
+    [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                var contacts = await _contactService.GetFilteredContactsPaged(
+                    name, city, state, sortBy, order, pageNumber, pageSize);
+                return Ok(contacts);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error occurred while retrieving contacts");
             }
         }
 
@@ -131,6 +167,28 @@ namespace ContactManagementAPI.Controllers
             catch (Exception)
             {
                 return StatusCode(500, $"Internal server error occurred while deleting contact {id}");
+            }
+        }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PatchContact(int id, [FromBody] Dictionary<string, object> patchValues)
+        {
+            try
+            {
+                await _contactService.UpdateContactPartial(id, patchValues);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"Contact with ID {id} not found");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, $"Internal server error occurred while updating contact {id}");
             }
         }
     }
