@@ -1,0 +1,686 @@
+{
+	"info": {
+		"_postman_id": "c0a9eb45-1be8-4e84-90ba-cb5e2cb88d99",
+		"name": "Contact Management API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18611035",
+		"_collection_link": "https://lunar-trinity-664795.postman.co/workspace/pluralsight-cities-demo~fab99db9-f08a-487b-9977-d44f5a4264e5/collection/18611035-c0a9eb45-1be8-4e84-90ba-cb5e2cb88d99?action=share&source=collection_link&creator=18611035"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "Get All Contacts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts"
+							]
+						},
+						"description": "Description: Retrieves all contacts from the database  \nResponse: Returns an array of contact objects"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Contact by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"1"
+							]
+						},
+						"description": "Description: Retrieves a specific contact by ID  \nParameters:\n\n- id (path parameter): The unique identifier of the contact  \n    Response: Returns a single contact object or 404 if not found"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts - Filter by Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts?name=John",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "John"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts - Filter by City",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts?city=Seattle",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"",
+								"api",
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "city",
+									"value": "Seattle"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts - Filter by State",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts?state=WA",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "state",
+									"value": "WA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts - Multiple Filters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts?name=John&city=Seattle&state=WA",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "John"
+								},
+								{
+									"key": "city",
+									"value": "Seattle"
+								},
+								{
+									"key": "state",
+									"value": "WA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts - Sort by Name Ascending",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts?sortBy=name&order=asc",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "name"
+								},
+								{
+									"key": "order",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts - Sort by Name Descending",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts?sortBy=name&order=desc",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "name"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts - Sort by City",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts?sortBy=city",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "city"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts - Sort by State",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts?sortBy=state",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "state"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Paged Contacts - First Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/paged?pageNumber=1&pageSize=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"paged"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Paged Contacts - Second Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/paged?pageNumber=2&pageSize=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"paged"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "2"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Paged Contacts - Last Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/paged?pageNumber=100&pageSize=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"paged"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "100"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts - Filter and Sort",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts?name=John&sortBy=city",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "John"
+								},
+								{
+									"key": "sortBy",
+									"value": "city"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Paged Contacts - Filter and Sort",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/paged?city=Seattle&sortBy=name&pageSize=5",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"paged"
+							],
+							"query": [
+								{
+									"key": "city",
+									"value": "Seattle"
+								},
+								{
+									"key": "sortBy",
+									"value": "name"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Paged Contacts - All Features",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/paged?name=John&city=Seattle&state=WA&sortBy=name&order=desc&pageNumber=1&pageSize=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"paged"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "John"
+								},
+								{
+									"key": "city",
+									"value": "Seattle"
+								},
+								{
+									"key": "state",
+									"value": "WA"
+								},
+								{
+									"key": "sortBy",
+									"value": "name"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "POST Create New Contact",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"John Doe\",\r\n    \"email\": \"john@example.com\",\r\n    \"phoneNumber\": \"555-123-4567\",\r\n    \"address\": \"123 Main St\",\r\n    \"city\": \"Seattle\",\r\n    \"state\": \"WA\",\r\n    \"zipCode\": \"98101\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7091/api/contacts",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts"
+							]
+						},
+						"description": "Description: Creates a new contact  \nBody: JSON object containing contact details  \nRequired fields:\n\n- name: string (2-100 characters)\n    \n- email: valid email format\n    \n- phoneNumber: format \"555-123-4567\"\n    \n- address: string (5-200 characters)\n    \n- city: string (2-50 characters)\n    \n- state: 2 uppercase letters\n    \n- zipCode: 5 digits or 5+4 format  \n    Response: Returns the created contact with assigned ID"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT",
+			"item": [
+				{
+					"name": "PUT Update Existing Contact",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"John Doe\",\r\n    \"email\": \"john@example.com\",\r\n    \"phoneNumber\": \"555-123-4567\",\r\n    \"address\": \"123 Main St\",\r\n    \"city\": \"Seattle\",\r\n    \"state\": \"WA\",\r\n    \"zipCode\": \"98101\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"1"
+							]
+						},
+						"description": "Description: Updates an existing contact  \nParameters:\n\n- id (path parameter): Must match ID in request body  \n    Body: Complete contact object including ID  \n    Response: 204 No Content if successful"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "DELETE Contact",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"1"
+							]
+						},
+						"description": "Description: Removes a contact  \nParameters:\n\n- id (path parameter): The ID of the contact to delete  \n    Response: 204 No Content if successful"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PATCH",
+			"item": [
+				{
+					"name": "Patch Contact - Update Single Field",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"John Smith\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Contact - Update Multiple Fields",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"john.smith@email.com\",\r\n    \"state\": \"WA\",\r\n    \"zipCode\": \"98101\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Contact - Update Address Info",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"address\": \"456 Pine Street\",\r\n    \"city\": \"Portland\",\r\n    \"state\": \"OR\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7091/api/contacts/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7091",
+							"path": [
+								"api",
+								"contacts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
