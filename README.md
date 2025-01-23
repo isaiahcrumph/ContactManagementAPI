@@ -39,6 +39,14 @@ A .NET Core Web API for managing contact information, providing full CRUD operat
 - Paging: `/api/contacts/paged?pageNumber=1&pageSize=10`
 - Combined: `/api/contacts/paged?name=John&sortBy=city&pageNumber=1&pageSize=10`
 
+## Sample Data
+The application automatically generates 1000 sample contacts on first run using the built-in data seeder. This provides test data for:
+- Filtering functionality
+- Sorting operations
+- Pagination testing
+
+No manual data import is needed - just run the application and the test data will be created in your local database.
+
 ## Testing
 - Complete Postman collection included
 - 1000 sample contacts for testing
