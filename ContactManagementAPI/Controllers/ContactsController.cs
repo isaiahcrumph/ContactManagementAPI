@@ -3,9 +3,11 @@ using ContactManagementAPI.Services;
 using ContactManagementAPI.Models;
 using Microsoft.AspNetCore.Http;
 using ContactManagementAPI.Models.Pagination;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContactManagementAPI.Controllers
 {
+    [Authorize]
     [Route("api/contacts")]
     [ApiController]
     public class ContactsController : ControllerBase
