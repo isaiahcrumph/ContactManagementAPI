@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ContactManagementAPI.Controllers
 {
-    [Authorize]
-    [Route("api/contacts")]
+    //[Authorize]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/contacts")]
     [ApiController]
     public class ContactsController : ControllerBase
     {
@@ -18,6 +19,7 @@ namespace ContactManagementAPI.Controllers
             _contactService = contactService;
         }
 
+        [Authorize(Policy = "UserPolicy")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -43,7 +45,8 @@ namespace ContactManagementAPI.Controllers
                 return StatusCode(500, "Internal server error occurred while retrieving contacts");
             }
         }
-        
+
+        [Authorize(Policy = "UserPolicy")]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -65,17 +68,18 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
-       // /// <summary>
-       // /// Gets a paged list of contacts with optional filtering and sorting
-       // /// </summary>
-       // /// <param name="name">Filter by contact name</param>
-       // /// <param name="city">Filter by city</param>
-       // /// <param name="state">Filter by state (2 letter code)</param>
-       // /// <param name="sortBy">Sort by field (name, city, state)</param>
-       // /// <param name="order">Sort order (asc or desc)</param>
-       // /// <param name="pageNumber">Page number (starts from 1)</param>
-       // /// <param name="pageSize">Number of items per page</param>
+        // /// <summary>
+        // /// Gets a paged list of contacts with optional filtering and sorting
+        // /// </summary>
+        // /// <param name="name">Filter by contact name</param>
+        // /// <param name="city">Filter by city</param>
+        // /// <param name="state">Filter by state (2 letter code)</param>
+        // /// <param name="sortBy">Sort by field (name, city, state)</param>
+        // /// <param name="order">Sort order (asc or desc)</param>
+        // /// <param name="pageNumber">Page number (starts from 1)</param>
+        // /// <param name="pageSize">Number of items per page</param>
 
+        [Authorize(Policy = "UserPolicy")]
         [HttpGet("paged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -100,6 +104,7 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -121,6 +126,7 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -151,6 +157,7 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -172,6 +179,7 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
