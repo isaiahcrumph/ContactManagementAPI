@@ -49,11 +49,11 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-// Get all API versions
-var provider = builder.Services.BuildServiceProvider().GetRequiredService<IApiVersionDescriptionProvider>();
+    // Get all API versions
+    var provider = builder.Services.BuildServiceProvider().GetRequiredService<IApiVersionDescriptionProvider>();
 
     // Create a Swagger document for each API version
-    foreach (var description in provider.ApiVersionDescriptionProvider())
+    foreach (var description in provider.ApiVersionDescriptions)
     {
         options.SwaggerDoc(
             description.GroupName,
@@ -61,17 +61,16 @@ var provider = builder.Services.BuildServiceProvider().GetRequiredService<IApiVe
             {
                 Title = $"Contact Management API {description.ApiVersion}",
                 Version = description.ApiVersion.ToString(),
-                Description = description.ApiVersionDescriptionProvider()
+                Description = description.IsDeprecated
                     ? "This API version has been deprecated."
                     : "An API to manage contact information"
             });
     }
 
-    // XML documentation configuration should be OUTSIDE the loop
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    options.IncludeXmlComments(xmlPath);
-
+    //// XML documentation configuration
+    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    //options.IncludeXmlComments(xmlPath);
 
     // Configure Swagger for JWT
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -142,14 +141,7 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-builder.Services.AddApiVersioning(options =>
-{
-    options.DefaultApiVersion = new ApiVersion(1, 0);
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ReportApiVersions = true;
-});
 
- 
 var app = builder.Build();
 
 app.UseHttpsRedirection();

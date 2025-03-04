@@ -1,0 +1,125 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+### Variables
+@apiUrl = https://localhost:5001
+@adminToken = 
+@userToken = 
+
+### 1. Login as Admin
+# @name adminLogin
+POST {{apiUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Store admin token from the previous response
+# @name setAdminToken
+# In a real environment, extract this from the response above
+# For manual testing, copy the token and paste it here
+@adminToken = {{adminLogin.response.body}}
+
+### 2. Login as User
+# @name userLogin
+POST {{apiUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user123"
+}
+
+### Store user token from the previous response
+# @name setUserToken
+@userToken = {{userLogin.response.body}}
+
+### 3. Test v1 Endpoints
+
+### 3.1 Get All Contacts (v1, User access)
+GET {{apiUrl}}/api/v1/contacts
+Authorization: Bearer {{userToken}}
+
+### 3.2 Get Contact by ID (v1, User access)
+GET {{apiUrl}}/api/v1/contacts/1
+Authorization: Bearer {{userToken}}
+
+### 3.3 Create Contact (v1, Admin access)
+POST {{apiUrl}}/api/v1/contacts
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "555-1234",
+  "address": "123 Main St",
+  "city": "Anytown",
+  "state": "CA",
+  "zipCode": "12345"
+}
+
+### 3.4 Update Contact (v1, Admin access)
+PUT {{apiUrl}}/api/v1/contacts/1
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "John Doe Updated",
+  "email": "john@example.com",
+  "phone": "555-1234",
+  "address": "123 Main St",
+  "city": "Anytown",
+  "state": "CA",
+  "zipCode": "12345"
+}
+
+### 3.5 Delete Contact (v1, Admin access)
+DELETE {{apiUrl}}/api/v1/contacts/1
+Authorization: Bearer {{adminToken}}
+
+### 4. Test v2 Endpoints
+
+### 4.1 Get Contacts Summary (v2, User access)
+GET {{apiUrl}}/api/v2/contacts/summary
+Authorization: Bearer {{userToken}}
+
+### 4.2 Get All Contacts (v2, User access)
+GET {{apiUrl}}/api/v2/contacts
+Authorization: Bearer {{userToken}}
+
+### 4.3 Get Contact by ID (v2, User access)
+GET {{apiUrl}}/api/v2/contacts/1
+Authorization: Bearer {{userToken}}
+
+### 4.4 Create Contact (v2, Admin access)
+POST {{apiUrl}}/api/v2/contacts
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Jane Smith",
+  "email": "jane@example.com",
+  "phone": "555-5678",
+  "address": "456 Oak Ave",
+  "city": "Somewhere",
+  "state": "NY",
+  "zipCode": "67890"
+}
+
+### 5. Test Authorization Failures
+
+### 5.1 Try to create contact with User token (should fail)
+POST {{apiUrl}}/api/v2/contacts
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "name": "Will Fail",
+  "email": "fail@example.com",
+  "phone": "555-9999"
+}
+
+### 5.2 Try to access endpoint without token (should fail)
+GET {{apiUrl}}/api/v2/contacts
