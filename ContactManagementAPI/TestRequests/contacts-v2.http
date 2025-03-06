@@ -1,0 +1,85 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@baseUrl = https://localhost:7091
+@adminToken = {{adminLogin.response.body.token}}
+@userToken = {{userLogin.response.body.token}}
+
+### First get admin token
+# @name adminLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Then get user token
+# @name userLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user123"
+}
+
+### Get all contacts V2 (as User)
+GET {{baseUrl}}/api/v2/contacts
+Authorization: Bearer {{userToken}}
+
+### Get contact by ID V2 (as User)
+GET {{baseUrl}}/api/v2/contacts/1
+Authorization: Bearer {{userToken}}
+
+### Get paged contacts V2 (as User)
+GET {{baseUrl}}/api/v2/contacts/paged?pageNumber=1&pageSize=10
+Authorization: Bearer {{userToken}}
+
+### Get contacts summary V2 (as User) - V2 only endpoint
+GET {{baseUrl}}/api/v2/contacts/summary
+Authorization: Bearer {{userToken}}
+
+### Create new contact V2 (requires Admin)
+POST {{baseUrl}}/api/v2/contacts
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "V2 Test Contact",
+  "email": "v2test@example.com",
+  "phoneNumber": "555-234-5678",
+  "address": "234 V2 Avenue",
+  "city": "V2ville",
+  "state": "CA",
+  "zipCode": "90210"
+}
+
+### Update contact V2 (as Admin)
+PUT {{baseUrl}}/api/v2/contacts/1
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "id": 1,
+  "name": "V2 Updated Name",
+  "email": "v2updated@example.com",
+  "phoneNumber": "555-876-5432",
+  "address": "567 V2 Update Road",
+  "city": "V2Updateville",
+  "state": "TX",
+  "zipCode": "75001"
+}
+
+### Patch contact V2 (as Admin)
+PATCH {{baseUrl}}/api/v2/contacts/1
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "V2 Partially Updated",
+  "city": "V2Patchville"
+}
+
+### Delete contact V2 (as Admin)
+DELETE {{baseUrl}}/api/v2/contacts/3
+Authorization: Bearer {{adminToken}}

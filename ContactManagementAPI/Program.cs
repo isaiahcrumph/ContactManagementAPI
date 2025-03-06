@@ -97,10 +97,11 @@ builder.Services.AddSwaggerGen(options =>
             });
     }
 
-    //// XML documentation configuration
-    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    //options.IncludeXmlComments(xmlPath);
+
+    // XML documentation configuration
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
 
     // Configure Swagger for JWT
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -159,6 +160,17 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("Admin", "User"));
 });
 
+// Add CORS for HTTP REPL testing
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("HttpReplPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddApiVersioning(options =>
 {
     options.DefaultApiVersion = new ApiVersion(1, 0);
@@ -175,9 +187,13 @@ builder.Services.AddVersionedApiExplorer(options =>
 
 var app = builder.Build();
 
+// Enable CORS
+app.UseCors("HttpReplPolicy");
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 using (var scope = app.Services.CreateScope())
 {

@@ -1,0 +1,32 @@
+# Start HTTP REPL with your API
+httprepl https://localhost:7091
+
+# Set credentials
+post /api/auth/login -c "{"username":"admin","password":"admin123"}"
+
+# Store the token (replace TOKEN with the actual token value from the response)
+set header Authorization "Bearer TOKEN"
+
+# Navigate to the contacts endpoint
+cd api/v1/contacts
+
+# Get all contacts
+get
+
+# Get a specific contact
+get 1
+
+# Create a new contact
+post -c "{"name":"HTTP REPL Contact","email":"httprepl@example.com","phoneNumber":"555-987-6543","address":"123 REPL Street","city":"REPLville","state":"WA","zipCode":"98101"}"
+
+# Update a contact
+put 1 -c "{"id":1,"name":"Updated REPL Contact","email":"updated@example.com","phoneNumber":"555-123-4567","address":"456 REPL Avenue","city":"REPLville","state":"WA","zipCode":"98101"}"
+
+# Delete a contact
+delete 2
+
+# Test V2 endpoints
+cd ../../v2/contacts
+
+# Get contacts summary (V2 only)
+get summary

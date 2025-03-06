@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Management API - Endpoints Explorer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        .endpoint {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+            .endpoint h3 {
+                margin-top: 0;
+                display: flex;
+                align-items: center;
+            }
+
+        .method {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .get {
+            background: #61affe;
+            color: white;
+        }
+
+        .post {
+            background: #49cc90;
+            color: white;
+        }
+
+        .put {
+            background: #fca130;
+            color: white;
+        }
+
+        .delete {
+            background: #f93e3e;
+            color: white;
+        }
+
+        .patch {
+            background: #50e3c2;
+            color: white;
+        }
+
+        .path {
+            font-family: monospace;
+        }
+
+        .params, .responses {
+            margin-top: 10px;
+        }
+
+        .param, .response {
+            margin-bottom: 5px;
+        }
+
+        .version {
+            background: #7D4CDB;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Contact Management API - Endpoints Explorer</h1>
+
+    <h2>Authentication</h2>
+    <div class="endpoint">
+        <h3><span class="method post">POST</span> <span class="path">/api/auth/login</span></h3>
+        <p>Authenticates a user and generates a JWT token</p>
+        <div class="params">
+            <p><strong>Request body:</strong></p>
+            <pre>{
+  "username": "string",
+  "password": "string"
+}</pre>
+        </div>
+        <div class="responses">
+            <p><strong>Responses:</strong></p>
+            <div class="response">200 - Returns the JWT token and user information</div>
+            <div class="response">401 - If authentication fails</div>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <h3><span class="method post">POST</span> <span class="path">/api/auth/token</span></h3>
+        <p>Gets a plain text JWT token for a user</p>
+        <div class="params">
+            <p><strong>Request body:</strong></p>
+            <pre>{
+  "username": "string",
+  "password": "string"
+}</pre>
+        </div>
+        <div class="responses">
+            <p><strong>Responses:</strong></p>
+            <div class="response">200 - Returns the JWT token as plain text</div>
+            <div class="response">401 - If authentication fails</div>
+        </div>
+    </div>
+
+    <h2>Contacts API v1</h2>
+
+    <div class="endpoint">
+        <h3><span class="method get">GET</span> <span class="path">/api/v1/contacts</span> <span class="version">v1.0</span></h3>
+        <p>Gets all contacts with optional filtering and sorting</p>
+        <div class="params">
+            <p><strong>Query parameters:</strong></p>
+            <div class="param">name (string) - Filter by contact name</div>
+            <div class="param">city (string) - Filter by city</div>
+            <div class="param">state (string) - Filter by state (2 letter code)</div>
+            <div class="param">sortBy (string) - Sort by field (name, city, state)</div>
+            <div class="param">order (string) - Sort order (asc or desc)</div>
+        </div>
+        <div class="responses">
+            <p><strong>Responses:</strong></p>
+            <div class="response">200 - Returns the list of contacts</div>
+            <div class="response">403 - If the user doesn't have permission</div>
+            <div class="response">500 - If there was an internal server error</div>
+        </div>
+    </div>
+
+    <!-- Add more endpoints here following the same pattern -->
+
+    <h2>Contacts API v2</h2>
+
+    <div class="endpoint">
+        <h3><span class="method get">GET</span> <span class="path">/api/v2/contacts</span> <span class="version">v2.0</span></h3>
+        <p>Gets all contacts with optional filtering and sorting (v2 with enhanced metadata)</p>
+        <div class="params">
+            <p><strong>Query parameters:</strong></p>
+            <div class="param">name (string) - Filter by contact name</div>
+            <div class="param">city (string) - Filter by city</div>
+            <div class="param">state (string) - Filter by state (2 letter code)</div>
+            <div class="param">sortBy (string) - Sort by field (name, city, state)</div>
+            <div class="param">order (string) - Sort order (asc or desc)</div>
+        </div>
+        <div class="responses">
+            <p><strong>Responses:</strong></p>
+            <div class="response">200 - Returns the list of contacts with metadata</div>
+            <div class="response">401 - If the user is not authenticated</div>
+            <div class="response">403 - If the user doesn't have permission</div>
+            <div class="response">500 - If there was an internal server error</div>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <h3><span class="method get">GET</span> <span class="path">/api/v2/contacts/summary</span> <span class="version">v2.0</span></h3>
+        <p>Gets a summary of contacts by state (v2 only endpoint)</p>
+        <div class="responses">
+            <p><strong>Responses:</strong></p>
+            <div class="response">200 - Returns the summary statistics</div>
+            <div class="response">403 - If the user doesn't have permission</div>
+            <div class="response">500 - If there was an internal server error</div>
+        </div>
+    </div>
+
+    <!-- Add more v2 endpoints -->
+
+</body>
+</html>

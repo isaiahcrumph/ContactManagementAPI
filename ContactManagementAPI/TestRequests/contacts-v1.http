@@ -1,0 +1,100 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@baseUrl = https://localhost:7091
+@adminToken = {{adminLogin.response.body.token}}
+@userToken = {{userLogin.response.body.token}}
+
+### First get admin token
+# @name adminLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Then get user token
+# @name userLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user123"
+}
+
+### Get all contacts (as User)
+GET {{baseUrl}}/api/v1/contacts
+Authorization: Bearer {{userToken}}
+
+### Get all contacts (as Admin)
+GET {{baseUrl}}/api/v1/contacts
+Authorization: Bearer {{adminToken}}
+
+### Get contact by ID (as User)
+GET {{baseUrl}}/api/v1/contacts/1
+Authorization: Bearer {{userToken}}
+
+### Get paged contacts (as User)
+GET {{baseUrl}}/api/v1/contacts/paged?pageNumber=1&pageSize=10
+Authorization: Bearer {{userToken}}
+
+### Create new contact (requires Admin)
+POST {{baseUrl}}/api/v1/contacts
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Test Contact",
+  "email": "test@example.com",
+  "phoneNumber": "555-123-4567",
+  "address": "123 Test Street",
+  "city": "Testville",
+  "state": "WA",
+  "zipCode": "98101"
+}
+
+### Try to create contact (as User - should fail)
+POST {{baseUrl}}/api/v1/contacts
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "name": "Test Contact",
+  "email": "test@example.com",
+  "phoneNumber": "555-123-4567",
+  "address": "123 Test Street",
+  "city": "Testville",
+  "state": "WA",
+  "zipCode": "98101"
+}
+
+### Update contact (as Admin)
+PUT {{baseUrl}}/api/v1/contacts/1
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "id": 1,
+  "name": "Updated Name",
+  "email": "updated@example.com",
+  "phoneNumber": "555-987-6543",
+  "address": "456 Update Lane",
+  "city": "Updateville",
+  "state": "NY",
+  "zipCode": "10001"
+}
+
+### Patch contact (as Admin)
+PATCH {{baseUrl}}/api/v1/contacts/1
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Partially Updated Name",
+  "city": "Patchville"
+}
+
+### Delete contact (as Admin)
+DELETE {{baseUrl}}/api/v1/contacts/2
+Authorization: Bearer {{adminToken}}

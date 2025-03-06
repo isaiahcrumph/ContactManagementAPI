@@ -4,6 +4,9 @@ using ContactManagementAPI.Auth;
 using Microsoft.AspNetCore.Authorization;
 namespace ContactManagementAPI.Controllers
 {
+    /// <summary>
+    /// Controller for authentication operations
+    /// </summary>
     [ApiVersionNeutral]
     [Route("api/auth")]
     [ApiController]
@@ -11,14 +14,26 @@ namespace ContactManagementAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly JwtHandler _jwtHandler;
-        private readonly IConfiguration _configuration; // Add this line
+        private readonly IConfiguration _configuration;
 
-        public AuthController(JwtHandler jwtHandler, IConfiguration configuration) // Add configuration parameter
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthController"/> class
+        /// </summary>
+        /// <param name="jwtHandler">The JWT handler service</param>
+        /// <param name="configuration">The application configuration</param>
+        public AuthController(JwtHandler jwtHandler, IConfiguration configuration)
         {
             _jwtHandler = jwtHandler;
-            _configuration = configuration; // Add this line
+            _configuration = configuration;
         }
 
+        /// <summary>
+        /// Authenticates a user and generates a JWT token
+        /// </summary>
+        /// <param name="login">The login credentials</param>
+        /// <returns>The JWT token and user information if authentication is successful</returns>
+        /// <response code="200">Returns the JWT token and user information</response>
+        /// <response code="401">If authentication fails</response>
         [HttpPost("login")]
         [Consumes("application/json")]
         [Produces("application/json", "text/plain")]
@@ -29,7 +44,6 @@ namespace ContactManagementAPI.Controllers
             // Validate credentials
             string role = "";
             string username = "";
-
             if (login.Username == "admin" && login.Password == "admin123")
             {
                 username = login.Username;
@@ -44,15 +58,12 @@ namespace ContactManagementAPI.Controllers
             {
                 return Unauthorized(new { message = "Invalid username or password" });
             }
-
             var token = _jwtHandler.GenerateToken(username, role);
-
             // Check if client wants plaintext (for easy copying)
             if (Request.Headers.Accept.Any(h => h.Contains("text/plain")))
             {
                 return Content(token, "text/plain");
             }
-
             // Otherwise return json with more details
             return Ok(new
             {
@@ -63,6 +74,13 @@ namespace ContactManagementAPI.Controllers
             });
         }
 
+        /// <summary>
+        /// Gets a plain text JWT token for a user
+        /// </summary>
+        /// <param name="login">The login credentials</param>
+        /// <returns>A JWT token as plain text if authentication is successful</returns>
+        /// <response code="200">Returns the JWT token as plain text</response>
+        /// <response code="401">If authentication fails</response>
         [HttpPost("token")]
         [Consumes("application/json")]
         [Produces("text/plain")]
@@ -79,7 +97,6 @@ namespace ContactManagementAPI.Controllers
             {
                 return Content(_jwtHandler.GenerateToken(login.Username, "User"), "text/plain");
             }
-
             return Unauthorized("Invalid username or password");
         }
     }

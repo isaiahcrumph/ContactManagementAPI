@@ -7,18 +7,37 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ContactManagementAPI.Controllers
 {
-    //[Authorize]
+    /// <summary>
+    /// Controller for managing contacts in API version 1.0
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/contacts")]
     [ApiController]
     public class ContactsController : ControllerBase
     {
         private readonly IContactService _contactService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContactsController"/> class
+        /// </summary>
+        /// <param name="contactService">The service for contact operations</param>
         public ContactsController(IContactService contactService)
         {
             _contactService = contactService;
         }
 
+        /// <summary>
+        /// Gets all contacts with optional filtering and sorting
+        /// </summary>
+        /// <param name="name">Filter by contact name</param>
+        /// <param name="city">Filter by city</param>
+        /// <param name="state">Filter by state (2 letter code)</param>
+        /// <param name="sortBy">Sort by field (name, city, state)</param>
+        /// <param name="order">Sort order (asc or desc)</param>
+        /// <returns>A list of contacts matching the specified criteria</returns>
+        /// <response code="200">Returns the list of contacts</response>
+        /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "UserPolicy")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -47,6 +66,15 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a specific contact by ID
+        /// </summary>
+        /// <param name="id">The ID of the contact to retrieve</param>
+        /// <returns>The contact details</returns>
+        /// <response code="200">Returns the contact</response>
+        /// <response code="404">If the contact doesn't exist</response>
+        /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "UserPolicy")]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -70,17 +98,20 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
-        // /// <summary>
-        // /// Gets a paged list of contacts with optional filtering and sorting
-        // /// </summary>
-        // /// <param name="name">Filter by contact name</param>
-        // /// <param name="city">Filter by city</param>
-        // /// <param name="state">Filter by state (2 letter code)</param>
-        // /// <param name="sortBy">Sort by field (name, city, state)</param>
-        // /// <param name="order">Sort order (asc or desc)</param>
-        // /// <param name="pageNumber">Page number (starts from 1)</param>
-        // /// <param name="pageSize">Number of items per page</param>
-
+        /// <summary>
+        /// Gets a paged list of contacts with optional filtering and sorting
+        /// </summary>
+        /// <param name="name">Filter by contact name</param>
+        /// <param name="city">Filter by city</param>
+        /// <param name="state">Filter by state (2 letter code)</param>
+        /// <param name="sortBy">Sort by field (name, city, state)</param>
+        /// <param name="order">Sort order (asc or desc)</param>
+        /// <param name="pageNumber">Page number (starts from 1)</param>
+        /// <param name="pageSize">Number of items per page</param>
+        /// <returns>A paged result containing contacts and pagination metadata</returns>
+        /// <response code="200">Returns the paged list of contacts</response>
+        /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "UserPolicy")]
         [HttpGet("paged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -107,6 +138,15 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a new contact
+        /// </summary>
+        /// <param name="contact">The contact data to create</param>
+        /// <returns>The created contact with its assigned ID</returns>
+        /// <response code="201">Returns the newly created contact</response>
+        /// <response code="400">If the contact data is invalid</response>
+        /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -130,6 +170,17 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates an existing contact
+        /// </summary>
+        /// <param name="id">The ID of the contact to update</param>
+        /// <param name="contact">The updated contact data</param>
+        /// <returns>No content if successful</returns>
+        /// <response code="204">If the contact was successfully updated</response>
+        /// <response code="400">If the contact data is invalid or ID mismatch</response>
+        /// <response code="404">If the contact doesn't exist</response>
+        /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -162,6 +213,15 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a contact
+        /// </summary>
+        /// <param name="id">The ID of the contact to delete</param>
+        /// <returns>No content if successful</returns>
+        /// <response code="204">If the contact was successfully deleted</response>
+        /// <response code="404">If the contact doesn't exist</response>
+        /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -185,6 +245,17 @@ namespace ContactManagementAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Partially updates a contact
+        /// </summary>
+        /// <param name="id">The ID of the contact to update</param>
+        /// <param name="patchValues">The values to update</param>
+        /// <returns>No content if successful</returns>
+        /// <response code="204">If the contact was successfully updated</response>
+        /// <response code="400">If the patch data is invalid</response>
+        /// <response code="404">If the contact doesn't exist</response>
+        /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "AdminPolicy")]
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
