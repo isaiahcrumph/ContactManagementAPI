@@ -36,19 +36,21 @@ namespace ContactManagementAPI.Controllers
         /// <param name="order">Sort order (asc or desc)</param>
         /// <returns>A list of contacts matching the specified criteria</returns>
         /// <response code="200">Returns the list of contacts</response>
+        /// <response code="401">If the user is not authenticated</response>
         /// <response code="403">If the user doesn't have permission</response>
         /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "UserPolicy")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<object>> GetContacts(
-    [FromQuery] string? name = null,
-    [FromQuery] string? city = null,
-    [FromQuery] string? state = null,
-    [FromQuery] string? sortBy = null,
-    [FromQuery] string? order = null)
+            [FromQuery] string? name = null,
+            [FromQuery] string? city = null,
+            [FromQuery] string? state = null,
+            [FromQuery] string? sortBy = null,
+            [FromQuery] string? order = null)
         {
             try
             {
@@ -72,12 +74,14 @@ namespace ContactManagementAPI.Controllers
         /// <param name="id">The ID of the contact to retrieve</param>
         /// <returns>The contact details</returns>
         /// <response code="200">Returns the contact</response>
-        /// <response code="404">If the contact doesn't exist</response>
+        /// <response code="401">If the user is not authenticated</response>
         /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="404">If the contact doesn't exist</response>
         /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "UserPolicy")]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -110,21 +114,23 @@ namespace ContactManagementAPI.Controllers
         /// <param name="pageSize">Number of items per page</param>
         /// <returns>A paged result containing contacts and pagination metadata</returns>
         /// <response code="200">Returns the paged list of contacts</response>
+        /// <response code="401">If the user is not authenticated</response>
         /// <response code="403">If the user doesn't have permission</response>
         /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "UserPolicy")]
         [HttpGet("paged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PagedResult<Contact>>> GetContactsPaged(
-    [FromQuery] string? name = null,
-    [FromQuery] string? city = null,
-    [FromQuery] string? state = null,
-    [FromQuery] string? sortBy = null,
-    [FromQuery] string? order = null,
-    [FromQuery] int pageNumber = 1,
-    [FromQuery] int pageSize = 10)
+            [FromQuery] string? name = null,
+            [FromQuery] string? city = null,
+            [FromQuery] string? state = null,
+            [FromQuery] string? sortBy = null,
+            [FromQuery] string? order = null,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
             try
             {
@@ -145,12 +151,14 @@ namespace ContactManagementAPI.Controllers
         /// <returns>The created contact with its assigned ID</returns>
         /// <response code="201">Returns the newly created contact</response>
         /// <response code="400">If the contact data is invalid</response>
+        /// <response code="401">If the user is not authenticated</response>
         /// <response code="403">If the user doesn't have permission</response>
         /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Contact>> PostContact(Contact contact)
@@ -178,13 +186,15 @@ namespace ContactManagementAPI.Controllers
         /// <returns>No content if successful</returns>
         /// <response code="204">If the contact was successfully updated</response>
         /// <response code="400">If the contact data is invalid or ID mismatch</response>
-        /// <response code="404">If the contact doesn't exist</response>
+        /// <response code="401">If the user is not authenticated</response>
         /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="404">If the contact doesn't exist</response>
         /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -219,12 +229,14 @@ namespace ContactManagementAPI.Controllers
         /// <param name="id">The ID of the contact to delete</param>
         /// <returns>No content if successful</returns>
         /// <response code="204">If the contact was successfully deleted</response>
-        /// <response code="404">If the contact doesn't exist</response>
+        /// <response code="401">If the user is not authenticated</response>
         /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="404">If the contact doesn't exist</response>
         /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -253,13 +265,15 @@ namespace ContactManagementAPI.Controllers
         /// <returns>No content if successful</returns>
         /// <response code="204">If the contact was successfully updated</response>
         /// <response code="400">If the patch data is invalid</response>
-        /// <response code="404">If the contact doesn't exist</response>
+        /// <response code="401">If the user is not authenticated</response>
         /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="404">If the contact doesn't exist</response>
         /// <response code="500">If there was an internal server error</response>
         [Authorize(Policy = "AdminPolicy")]
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

@@ -2,6 +2,7 @@
 using ContactManagementAPI.Models.Auth;
 using ContactManagementAPI.Auth;
 using Microsoft.AspNetCore.Authorization;
+
 namespace ContactManagementAPI.Controllers
 {
     /// <summary>
@@ -33,17 +34,25 @@ namespace ContactManagementAPI.Controllers
         /// <param name="login">The login credentials</param>
         /// <returns>The JWT token and user information if authentication is successful</returns>
         /// <response code="200">Returns the JWT token and user information</response>
+        /// <response code="400">If the request body is invalid</response>
         /// <response code="401">If authentication fails</response>
         [HttpPost("login")]
         [Consumes("application/json")]
         [Produces("application/json", "text/plain")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult Login([FromBody] LoginModel login)
         {
             // Validate credentials
             string role = "";
             string username = "";
+
+            if (login == null)
+            {
+                return BadRequest("Login credentials are required");
+            }
+
             if (login.Username == "admin" && login.Password == "admin123")
             {
                 username = login.Username;
@@ -58,12 +67,15 @@ namespace ContactManagementAPI.Controllers
             {
                 return Unauthorized(new { message = "Invalid username or password" });
             }
+
             var token = _jwtHandler.GenerateToken(username, role);
+
             // Check if client wants plaintext (for easy copying)
             if (Request.Headers.Accept.Any(h => h.Contains("text/plain")))
             {
                 return Content(token, "text/plain");
             }
+
             // Otherwise return json with more details
             return Ok(new
             {
@@ -80,15 +92,22 @@ namespace ContactManagementAPI.Controllers
         /// <param name="login">The login credentials</param>
         /// <returns>A JWT token as plain text if authentication is successful</returns>
         /// <response code="200">Returns the JWT token as plain text</response>
+        /// <response code="400">If the request body is invalid</response>
         /// <response code="401">If authentication fails</response>
         [HttpPost("token")]
         [Consumes("application/json")]
         [Produces("text/plain")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult<string> GetToken([FromBody] LoginModel login)
         {
             // Validate credentials
+            if (login == null)
+            {
+                return BadRequest("Login credentials are required");
+            }
+
             if (login.Username == "admin" && login.Password == "admin123")
             {
                 return Content(_jwtHandler.GenerateToken(login.Username, "Admin"), "text/plain");
