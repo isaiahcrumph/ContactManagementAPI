@@ -1,7 +1,6 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 #nullable disable
-
 namespace ContactManagementAPI.Models
 {
     /// <summary>
@@ -15,14 +14,32 @@ namespace ContactManagementAPI.Models
         public int Id { get; set; }
 
         /// <summary>
-        /// Full name of the contact
+        /// First name of the contact
         /// </summary>
-        /// <example>John Doe</example>
-        [Required(ErrorMessage = "Name is required")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Name must be between 2 and 100 characters")]
-        [SwaggerSchema(Description = "Full name of contact")]
-        public string Name { get; set; }
+        /// <example>John</example>
+        [Required(ErrorMessage = "First name is required")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "First name must be between 2 and 50 characters")]
+        [RegularExpression(@"^[A-Za-z\s'-]+$", ErrorMessage = "First name should contain only letters, spaces, hyphens, and apostrophes")]
+        [SwaggerSchema(Description = "First name of contact")]
+        public string FirstName { get; set; }
 
+        /// <summary>
+        /// Last name of the contact
+        /// </summary>
+        /// <example>Doe</example>
+        [Required(ErrorMessage = "Last name is required")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name must be between 2 and 50 characters")]
+        [RegularExpression(@"^[A-Za-z\s'-]+$", ErrorMessage = "Last name should contain only letters, spaces, hyphens, and apostrophes")]
+        [SwaggerSchema(Description = "Last name of contact")]
+        public string LastName { get; set; }
+
+        /// <summary>
+        /// Full name of the contact (computed property)
+        /// </summary>
+        [SwaggerSchema(Description = "Full name of contact (computed from FirstName and LastName)")]
+        public string FullName => $"{FirstName} {LastName}";
+
+        // Keep the rest of your properties unchanged
         /// <summary>
         /// Email address for the contact
         /// </summary>

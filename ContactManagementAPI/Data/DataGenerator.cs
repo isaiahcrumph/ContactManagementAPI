@@ -1,5 +1,4 @@
 ﻿using ContactManagementAPI.Models;
-
 namespace ContactManagementAPI.Data
 {
     public static class DataGenerator
@@ -13,16 +12,15 @@ namespace ContactManagementAPI.Data
         public static List<Contact> GenerateContacts(int count)
         {
             var contacts = new List<Contact>();
-
             for (int i = 0; i < count; i++)
             {
                 var firstName = FirstNames[Random.Next(FirstNames.Length)];
                 var lastName = LastNames[Random.Next(LastNames.Length)];
                 var cityIndex = Random.Next(Cities.Length);
-
                 contacts.Add(new Contact
                 {
-                    Name = $"{firstName} {lastName}",
+                    FirstName = firstName,
+                    LastName = lastName,
                     Email = $"{firstName.ToLower()}.{lastName.ToLower()}@example.com",
                     PhoneNumber = $"{Random.Next(100, 999)}-{Random.Next(100, 999)}-{Random.Next(1000, 9999)}",
                     Address = $"{Random.Next(100, 9999)} {lastName} Street",
@@ -31,7 +29,6 @@ namespace ContactManagementAPI.Data
                     ZipCode = Random.Next(10000, 99999).ToString()
                 });
             }
-
             return contacts;
         }
     }

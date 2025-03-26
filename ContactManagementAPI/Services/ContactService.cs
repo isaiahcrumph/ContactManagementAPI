@@ -57,10 +57,12 @@ public async Task<IEnumerable<Contact>> GetFilteredContacts(
 {
     var query = _context.Contacts.AsQueryable();
 
-    // Existing filtering logic
-    if (!string.IsNullOrEmpty(name))
-        query = query.Where(c => c.Name.Contains(name));
-    if (!string.IsNullOrEmpty(city))
+            // Existing filtering logic
+            if (!string.IsNullOrEmpty(name))
+                query = query.Where(c => c.FirstName.Contains(name) ||
+                    c.LastName.Contains(name) ||
+                    (c.FirstName + " " + c.LastName).Contains(name));
+            if (!string.IsNullOrEmpty(city))
         query = query.Where(c => c.City.Contains(city));
     if (!string.IsNullOrEmpty(state))
         query = query.Where(c => c.State == state);
@@ -70,7 +72,9 @@ public async Task<IEnumerable<Contact>> GetFilteredContacts(
     {
         query = sortBy.ToLower() switch
         {
-            "name" => order?.ToLower() == "desc" ? query.OrderByDescending(c => c.Name) : query.OrderBy(c => c.Name),
+            "name" => order?.ToLower() == "desc" ?
+    query.OrderByDescending(c => c.LastName).ThenByDescending(c => c.FirstName) :
+    query.OrderBy(c => c.LastName).ThenBy(c => c.FirstName),
             "city" => order?.ToLower() == "desc" ? query.OrderByDescending(c => c.City) : query.OrderBy(c => c.City),
             "state" => order?.ToLower() == "desc" ? query.OrderByDescending(c => c.State) : query.OrderBy(c => c.State),
             _ => query.OrderBy(c => c.Id)
@@ -96,7 +100,9 @@ public async Task<IEnumerable<Contact>> GetFilteredContacts(
 
             // Apply filters
             if (!string.IsNullOrEmpty(name))
-                query = query.Where(c => c.Name.Contains(name));
+                query = query.Where(c => c.FirstName.Contains(name) ||
+                                         c.LastName.Contains(name) ||
+                                         (c.FirstName + " " + c.LastName).Contains(name));
             if (!string.IsNullOrEmpty(city))
                 query = query.Where(c => c.City.Contains(city));
             if (!string.IsNullOrEmpty(state))
@@ -107,7 +113,9 @@ public async Task<IEnumerable<Contact>> GetFilteredContacts(
             {
                 query = sortBy.ToLower() switch
                 {
-                    "name" => order?.ToLower() == "desc" ? query.OrderByDescending(c => c.Name) : query.OrderBy(c => c.Name),
+                    "name" => order?.ToLower() == "desc" ?
+    query.OrderByDescending(c => c.LastName).ThenByDescending(c => c.FirstName) :
+    query.OrderBy(c => c.LastName).ThenBy(c => c.FirstName),
                     "city" => order?.ToLower() == "desc" ? query.OrderByDescending(c => c.City) : query.OrderBy(c => c.City),
                     "state" => order?.ToLower() == "desc" ? query.OrderByDescending(c => c.State) : query.OrderBy(c => c.State),
                     _ => query.OrderBy(c => c.Id)

@@ -9,7 +9,8 @@ namespace ContactManagementAPI.Examples
         {
             return new Contact
             {
-                Name = "John Doe",
+                FirstName = "John",
+                LastName = "Doe",
                 Email = "johndoe@example.com",
                 PhoneNumber = "555-123-4567",
                 Address = "123 Main Street",
