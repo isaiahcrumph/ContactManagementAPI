@@ -71,6 +71,13 @@ namespace ContactManagementAPI.Services
             string? order = null);
 
         /// <summary>
+        /// Searches contacts by name or email.
+        /// </summary>
+        /// <param name="query">The search query string</param>
+        /// <returns>A list of matching contacts</returns>
+        Task<IEnumerable<Contact>> SearchContacts(string query);
+
+        /// <summary>
         /// Gets a paged list of filtered and sorted contacts
         /// </summary>
         /// <param name="name">Optional filter by contact name</param>
@@ -89,5 +96,6 @@ namespace ContactManagementAPI.Services
             string? order = null,
             int pageNumber = 1,
             int pageSize = 10);
+
     }
 }

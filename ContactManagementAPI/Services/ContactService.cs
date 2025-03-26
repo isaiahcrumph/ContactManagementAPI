@@ -48,7 +48,21 @@ namespace ContactManagementAPI.Services
             }
         }
 
-public async Task<IEnumerable<Contact>> GetFilteredContacts(
+        public async Task<IEnumerable<Contact>> SearchContacts(string query)
+        {
+            var searchQuery = query.ToLower();
+
+            return await _context.Contacts
+                .Where(c => c.FirstName.ToLower().Contains(searchQuery) ||
+                            c.LastName.ToLower().Contains(searchQuery) ||
+                            c.Email.ToLower().Contains(searchQuery) ||
+                            (c.FirstName + " " + c.LastName).ToLower().Contains(searchQuery))
+                .ToListAsync();
+        }
+
+
+
+        public async Task<IEnumerable<Contact>> GetFilteredContacts(
     string? name = null, 
     string? city = null, 
     string? state = null,

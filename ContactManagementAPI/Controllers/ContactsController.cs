@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using ContactManagementAPI.Models.Pagination;
 using Microsoft.AspNetCore.Authorization;
 
+
 namespace ContactManagementAPI.Controllers
 {
     /// <summary>
@@ -143,6 +144,42 @@ namespace ContactManagementAPI.Controllers
                 return StatusCode(500, "Internal server error occurred while retrieving contacts");
             }
         }
+
+        /// <summary>
+        /// Searches contacts by name or email.
+        /// </summary>
+        /// <param name="query">The search query string</param>
+        /// <returns>List of matching contacts</returns>
+        /// <response code="200">Returns the list of matching contacts</response>
+        /// <response code="400">If the search query is empty</response>
+        /// <response code="401">If the user is not authenticated</response>
+        /// <response code="403">If the user doesn't have permission</response>
+        /// <response code="500">If there was an internal server error</response>
+        [Authorize(Policy = "UserPolicy")]
+        [HttpGet("search")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<Contact>>> SearchContacts([FromQuery] string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return BadRequest("Search query cannot be empty.");
+            }
+
+            try
+            {
+                var contacts = await _contactService.SearchContacts(query);
+                return Ok(contacts);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error occurred while searching for contacts.");
+            }
+        }
+
 
         /// <summary>
         /// Creates a new contact
