@@ -22,6 +22,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
 builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -147,6 +149,7 @@ builder.Services.AddDbContext<ContactDbContext>(options =>
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Contact>();
 
 builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<IEmptyContactService, EmptyContactService>();
 // Add this with your other service registrations
 builder.Services.AddScoped<JwtHandler>();
 

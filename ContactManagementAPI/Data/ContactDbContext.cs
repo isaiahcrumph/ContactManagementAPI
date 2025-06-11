@@ -12,5 +12,8 @@ namespace ContactManagementAPI.Data
         }
 
         public DbSet<Contact> Contacts { get; set; }
+
+        public DbSet<EmptyContact> EmptyContacts { get; set; }
+
     }
 }
